@@ -1,0 +1,3 @@
+Falta que las tablas esten centrados los datos
+QUe la fecha en crear reporte no se muestre cuando seleccionas todas las facturas
+Que las pantallas tengan prioridad (JInternalFrame always on top)
