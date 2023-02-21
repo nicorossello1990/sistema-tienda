@@ -49,7 +49,7 @@ public class AgregarArticuloPorTalle extends javax.swing.JPanel {
          model = (DefaultTableModel) tableTalles.getModel();
          model = Dominio.eliminarTabla(model); 
          String [] registros= new String[2];
-            ResultSet rs = this.p.bd.obtenerTallesPorArticulo(idArticulo);
+            ResultSet rs = this.p.bd.obtenerTallesPorArticuloYSucursal(idArticulo, facturaVenta.getSucursalSelect().getSelectedItem().toString());
              while(rs.next()){ 
                  String talle = rs.getString(1);
                  if (!facturaVenta.existeArticuloYTalle(idArticulo, talle)){ //Si no existe en la tabla de facturas lo agrega
@@ -70,7 +70,7 @@ public class AgregarArticuloPorTalle extends javax.swing.JPanel {
          model = (DefaultTableModel) tableTalles.getModel();
          model = Dominio.eliminarTabla(model); 
          String [] registros= new String[2];
-            ResultSet rs = this.p.bd.obtenerTallesPorArticulo(idArticulo);
+            ResultSet rs = this.p.bd.obtenerTallesPorArticuloYSucursal(idArticulo, detalleFacturaVenta.getSucursal().getText());
              while(rs.next()){ 
                  String talle = rs.getString(1);
                  if (!detalleFacturaVenta.existeArticuloYTalle(idArticulo, talle)){ //Si no existe en la tabla de facturas lo agrega

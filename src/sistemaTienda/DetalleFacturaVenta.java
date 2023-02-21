@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
@@ -78,6 +79,8 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
         saldo = new javax.swing.JTextField();
         nuevoPorcentajeTarjeta = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        sucursal = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tarticulos = new javax.swing.JTable();
@@ -151,7 +154,7 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
 
         jLabel3.setText("Comprobante");
 
-        jLabel4.setText("Fecha");
+        jLabel4.setText("Sucursal");
 
         comprobante.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Factura", "Nota de Crédito" }));
         comprobante.addActionListener(new java.awt.event.ActionListener() {
@@ -212,6 +215,10 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
 
         jLabel11.setText("%");
 
+        jLabel12.setText("Fecha");
+
+        sucursal.setText("S");
+
         javax.swing.GroupLayout jpanelLayout = new javax.swing.GroupLayout(jpanel);
         jpanel.setLayout(jpanelLayout);
         jpanelLayout.setHorizontalGroup(
@@ -220,80 +227,82 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
                 .addGap(30, 30, 30)
                 .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cliente)
+                    .addComponent(numero)
                     .addGroup(jpanelLayout.createSequentialGroup()
                         .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel9))
+                            .addComponent(jLabel9)
                             .addComponent(jLabel3))
                         .addGap(18, 18, 18)
                         .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(calender, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(comprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jpanelLayout.createSequentialGroup()
                                 .addComponent(forma, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nuevoPorcentajeTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(numero))
-                .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpanelLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
+                                .addComponent(nuevoPorcentajeTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpanelLayout.createSequentialGroup()
+                        .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)
                         .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpanelLayout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addGap(25, 25, 25))
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel7)))
-                    .addGroup(jpanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel11)))
-                .addGap(18, 18, 18)
+                            .addComponent(calender, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sucursal))
+                        .addGap(64, 64, 64)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(saldo, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(descuento, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(descuento, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpanelLayout.setVerticalGroup(
             jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(numero)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cliente)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(comprobante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8)
-                .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(forma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nuevoPorcentajeTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-                .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(calender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
-                .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(descuento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
                 .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpanelLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel8)
-                        .addGap(8, 8, 8))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                        .addComponent(numero)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cliente)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(comprobante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(8, 8, 8)
+                        .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(forma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nuevoPorcentajeTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))
+                        .addGap(15, 15, 15)
+                        .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(calender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(sucursal))
+                        .addGap(0, 33, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpanelLayout.createSequentialGroup()
+                        .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(descuento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalle de Artículos"));
@@ -391,7 +400,7 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1126, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1624, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton2)
@@ -404,16 +413,16 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
                             .addComponent(jLabel10))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(apagar)
-                            .addComponent(pagoCliente)
-                            .addComponent(total, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
-                            .addComponent(pagado))))
+                            .addComponent(apagar, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(pagoCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(total, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(pagado, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -440,9 +449,9 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(297, 297, 297)
-                .addComponent(registrar, javax.swing.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE)
-                .addGap(283, 283, 283))
+                .addGap(50, 50, 50)
+                .addComponent(registrar, javax.swing.GroupLayout.DEFAULT_SIZE, 1606, Short.MAX_VALUE)
+                .addGap(50, 50, 50))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -455,9 +464,9 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(30, 30, 30)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(22, 22, 22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(registrar, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
         );
@@ -557,6 +566,7 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
               descuento.setText(Dominio.A2Decimales(rst.getString(5)));//descuento
               motivo.setText(rst.getString(6));//motivo
               total.setText(Dominio.A2Decimales(rst.getString(8)));//total
+              sucursal.setText(rst.getString(11)); //sucursal
               totalAnterior =Float.parseFloat(total.getText());
               rst = this.p.bd.mostrarDatosFacturaProductoVenta(id_factura);
               tarticulos.getColumnModel().getColumn(8).setCellEditor(new DefaultCellEditor (descuentoArticulo));
@@ -620,6 +630,7 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
                          }             
                      } 
                   }
+                  String sucursalText = sucursal.getText();
                   int n=this.p.bd.actualizarFacturaVenta(fecha, forma.getSelectedItem().toString(),comprobante.getSelectedItem().toString(), descuento.getText(),motivo.getText(),total.getText(),estado,Dominio.A2Decimales(pagoCliente.getText()),this.nuevoPorcentajeTarjeta.getText(),this.id_factura);
                   if (n>0){  
                          this.p.bd.eliminarArticulosFacturaVenta(id_factura,comprobanteAnterior);
@@ -634,15 +645,15 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
                                 String preciot= model.getValueAt(i, 7).toString();  
                                 String descuentoProducto= Dominio.A2Decimales(model.getValueAt(i, 8).toString());  
                                 String motivo= model.getValueAt(i, 9).toString();  
-                                String subtotal = model.getValueAt(i, 10).toString();    
+                                String subtotal = model.getValueAt(i, 10).toString();                                 
                                 costo = Float.parseFloat(this.p.bd.obtenerCostoArticulo(id_articulo))*Integer.parseInt(cant);
                                 ganancia= Float.parseFloat(subtotal) -costo;
                                 if (comprobante.getSelectedItem().toString().equals("Factura")){
-                                     this.p.bd.actualizarStockArticulosPorTipoYTalle(cant,id_articulo, tipo, talle); 
+                                    this.p.bd.actualizarStockArticulosPorTipoTalleYSucursal(cant,id_articulo, tipo, talle, sucursalText);         
                                 }else{
                                        costo = costo*-1;
                                        ganancia= ganancia*-1;
-                                       this.p.bd.actualizarStockArticulosPorTipoYTalle("-"+cant,id_articulo, tipo, talle);
+                                       this.p.bd.actualizarStockArticulosPorTipoTalleYSucursal("-"+cant,id_articulo, tipo, talle, sucursalText);
                                 }
                                 this.p.bd.agregarFacturaArticulo(id_factura, id_articulo, talle, tipo, cant,Dominio.A2Decimales(Float.toString(costo)),Dominio.A2Decimales(Float.toString(ganancia)), precioe,preciot, descuentoProducto,motivo,subtotal);                             
                               }
@@ -719,7 +730,7 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
                String tipo = model.getValueAt(fila,3).toString();
                String talle = model.getValueAt(fila,4).toString();           
                String cantidadVieja= model.getValueAt(fila, 5).toString(); //cantidad que habia antes
-               String stock = String.valueOf(Integer.parseInt(this.p.bd.obtenerStockArticuloPorTalleYTipo(id_articulo, talle, tipo)) + this.p.bd.obtenerCantidadVendidaDeFacturaPorArticuloTalleTipoYFactura(id_articulo, talle, tipo, id_factura)); //Suma el stock que habia a la factura ya hecha si es que existe  
+               String stock = String.valueOf(Integer.parseInt(this.p.bd.obtenerStockArticuloPorTalleTipoYSucursal(id_articulo, talle, tipo, sucursal.getText())) + this.p.bd.obtenerCantidadVendidaDeFacturaPorArticuloTalleTipoYFactura(id_articulo, talle, tipo, id_factura)); //Suma el stock que habia a la factura ya hecha si es que existe  
                nom = model.getValueAt(fila,1).toString();                                    
                String cantidadNueva=JOptionPane.showInputDialog(this, "Agregue la cantidad deseada para el articulo "+nom+", talle: "+talle+". Stock Disponible: "+stock, "Control de Stock", JOptionPane.QUESTION_MESSAGE);
                try{
@@ -907,6 +918,7 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -930,6 +942,7 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
     private javax.swing.JTextField pagoCliente;
     private javax.swing.JButton registrar;
     private javax.swing.JTextField saldo;
+    private javax.swing.JLabel sucursal;
     private javax.swing.JTable tarticulos;
     private javax.swing.JTextField total;
     // End of variables declaration//GEN-END:variables
@@ -953,6 +966,10 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
     }
     
     private boolean validarStock(){
+        if (!this.p.bd.existeLaSucursal(sucursal.getText())){
+            JOptionPane.showMessageDialog(this,"La factura no se puede editar debido a que la sucursal ha sido eliminada", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
         if (this.getComprobante().getSelectedItem().toString().equals(Constantes.FACTURA)){
              model =  (DefaultTableModel) tarticulos.getModel();
             int filas = tarticulos.getRowCount();                   
@@ -962,7 +979,7 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
               String tipo = model.getValueAt(i, 3).toString();
               String talle = model.getValueAt(i, 4).toString();
               Integer cant =  Integer.parseInt(model.getValueAt(i, 5).toString());
-              Integer stock = Integer.parseInt(this.p.bd.obtenerStockArticuloPorTalleYTipo(id_articulo, talle,  tipo)); 
+              Integer stock = Integer.parseInt(this.p.bd.obtenerStockArticuloPorTalleTipoYSucursal(id_articulo, talle,  tipo, sucursal.getText())); 
               Integer stockAnterior = this.p.bd.obtenerCantidadVendidaDeFacturaPorArticuloTalleTipoYFactura(id_articulo, talle, tipo, id_factura);
               Integer stockTotal = stock + stockAnterior;
               if (cant > stockTotal){                         
@@ -973,4 +990,10 @@ public class DetalleFacturaVenta extends javax.swing.JInternalFrame implements O
         }
         return true;
     }
+
+    public JLabel getSucursal() {
+        return sucursal;
+    }
+    
+    
 }

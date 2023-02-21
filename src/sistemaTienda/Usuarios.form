@@ -120,7 +120,6 @@
             </Property>
           </Properties>
           <AccessibilityProperties>
-            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Lista de Usuarios"/>
             <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="Lista de Usuarios"/>
           </AccessibilityProperties>
 
@@ -137,7 +136,7 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="crollpane" pref="441" max="32767" attributes="0"/>
+                      <Component id="crollpane" pref="557" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cantidad" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -153,14 +152,20 @@
                 <Component class="javax.swing.JTable" name="tusuarios">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="3" rowCount="0">
+                      <Table columnCount="4" rowCount="0">
                         <Column editable="false" title="C&#xf3;digo Usuario" type="java.lang.Object"/>
                         <Column editable="false" title="Nombre de Usuario" type="java.lang.Object"/>
                         <Column editable="false" title="Rol" type="java.lang.Object"/>
+                        <Column editable="false" title="Sucursal" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                           <Title/>
                           <Editor/>
@@ -209,7 +214,6 @@
             </Property>
           </Properties>
           <AccessibilityProperties>
-            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Registrar Usuario"/>
             <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value=""/>
           </AccessibilityProperties>
 
@@ -222,7 +226,7 @@
                               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                               <Component id="nuevo" min="-2" pref="104" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-                              <Component id="cancelar" min="-2" pref="107" max="-2" attributes="0"/>
+                              <Component id="cancelar" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
@@ -240,19 +244,26 @@
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="rol" min="-2" pref="119" max="-2" attributes="0"/>
-                      <EmptySpace pref="182" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="modificar" pref="114" max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="guardar" pref="114" max="32767" attributes="0"/>
-                              <Component id="eliminar" pref="114" max="32767" attributes="0"/>
-                              <Component id="actualizar" alignment="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
+                              <Component id="rol" min="-2" pref="119" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="sucursalLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="sucursalSelect" min="-2" pref="119" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="modificar" max="32767" attributes="0"/>
+                          <Component id="guardar" max="32767" attributes="0"/>
+                          <Component id="eliminar" max="32767" attributes="0"/>
+                          <Component id="actualizar" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="744" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -280,6 +291,8 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="paswordLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="password" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="sucursalLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="sucursalSelect" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -434,6 +447,25 @@
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="repitePasswordKeyReleased"/>
                 <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="repitePasswordKeyTyped"/>
               </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="sucursalLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Sucursal"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="sucursalSelect">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="0"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sucursalSelectActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>

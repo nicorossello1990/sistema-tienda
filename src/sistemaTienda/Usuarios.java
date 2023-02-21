@@ -48,9 +48,22 @@ public class Usuarios extends javax.swing.JInternalFrame {
             
             this.p = p;
             cargar("");  
+            initSucursales();
             this.setLocation((p.getSize().width/2)-(this.getWidth()/2), (p.getSize().height/2)-(this.getHeight()/2));
     
 
+    }
+    
+      private void initSucursales() {
+            try {
+            ResultSet rs = this.p.bd.listarDatosSucursales();
+            while(rs.next())
+            {       
+                sucursalSelect.addItem(rs.getString("nombre"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
+        }                  
     }
 
     /**
@@ -85,6 +98,8 @@ public class Usuarios extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         password = new javax.swing.JPasswordField();
         repitePassword = new javax.swing.JPasswordField();
+        sucursalLabel = new javax.swing.JLabel();
+        sucursalSelect = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setClosable(true);
@@ -126,11 +141,11 @@ public class Usuarios extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Código Usuario", "Nombre de Usuario", "Rol"
+                "Código Usuario", "Nombre de Usuario", "Rol", "Sucursal"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -169,7 +184,7 @@ public class Usuarios extends javax.swing.JInternalFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(crollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
+                .addComponent(crollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cantidad)
                 .addContainerGap())
@@ -277,6 +292,15 @@ public class Usuarios extends javax.swing.JInternalFrame {
             }
         });
 
+        sucursalLabel.setText("Sucursal");
+
+        sucursalSelect.setEnabled(false);
+        sucursalSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sucursalSelectActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelUsuarioLayout = new javax.swing.GroupLayout(panelUsuario);
         panelUsuario.setLayout(panelUsuarioLayout);
         panelUsuarioLayout.setHorizontalGroup(
@@ -287,7 +311,7 @@ public class Usuarios extends javax.swing.JInternalFrame {
                         .addGap(27, 27, 27)
                         .addComponent(nuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(38, 38, 38)
-                        .addComponent(cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cancelar))
                     .addGroup(panelUsuarioLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(panelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -300,17 +324,22 @@ public class Usuarios extends javax.swing.JInternalFrame {
                             .addComponent(password)
                             .addComponent(repitePassword))))
                 .addGap(49, 49, 49)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(rol, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
+                .addGroup(panelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelUsuarioLayout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(55, 55, 55)
+                        .addComponent(rol, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelUsuarioLayout.createSequentialGroup()
+                        .addComponent(sucursalLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(sucursalSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(modificar, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
-                    .addGroup(panelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(guardar, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
-                        .addComponent(eliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
-                        .addComponent(actualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(24, 24, 24))
+                    .addComponent(modificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(guardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(eliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(actualizar))
+                .addContainerGap(744, Short.MAX_VALUE))
         );
         panelUsuarioLayout.setVerticalGroup(
             panelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -333,7 +362,9 @@ public class Usuarios extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(paswordLabel)
-                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sucursalLabel)
+                            .addComponent(sucursalSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panelUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(repitePasswordLabel)
@@ -381,9 +412,7 @@ public class Usuarios extends javax.swing.JInternalFrame {
                 .addGap(20, 20, 20))
         );
 
-        jPanel2.getAccessibleContext().setAccessibleName("Lista de Usuarios");
         jPanel2.getAccessibleContext().setAccessibleDescription("Lista de Usuarios");
-        panelUsuario.getAccessibleContext().setAccessibleName("Registrar Usuario");
         panelUsuario.getAccessibleContext().setAccessibleDescription("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -419,6 +448,7 @@ public class Usuarios extends javax.swing.JInternalFrame {
       eliminar.setEnabled(true);
       actualizar.setEnabled(false);
       rol.setEnabled(false);
+      sucursalSelect.setEnabled(false);
       tusuarios.setEnabled(true);
       cancelar.setEnabled(false);
     }
@@ -446,13 +476,11 @@ public class Usuarios extends javax.swing.JInternalFrame {
           modificar.setEnabled(false);
           buscar.setEnabled(false);
           mostrar.setEnabled(false);
-
-    
-        
+          sucursalSelect.setEnabled(true);
     }//GEN-LAST:event_nuevoActionPerformed
 
      private  void cargar(String valor){
-    String []Registros=new String[5];
+    String []Registros=new String[6];
     model= (DefaultTableModel) tusuarios.getModel();
     model = Dominio.eliminarTabla(model); 
         try {             
@@ -461,7 +489,8 @@ public class Usuarios extends javax.swing.JInternalFrame {
               {
                   Registros[0]= rs.getString("id_user");
                   Registros[1]= rs.getString("nombre");   
-                  Registros[2]= rs.getString("rol");   
+                  Registros[2]= rs.getString("rol");
+                  Registros[3]= rs.getString("sucursal");
                   model.addRow(Registros);
               }
               tusuarios.setModel(model);
@@ -535,6 +564,7 @@ public class Usuarios extends javax.swing.JInternalFrame {
               password.setEnabled(true);
               nombre.setEnabled(true);
               rol.setEnabled(true);
+              sucursalSelect.setEnabled(true);
               repitePassword.setEnabled(true);
               tusuarios.setEnabled(false);
               eliminar.setEnabled(false);
@@ -546,8 +576,10 @@ public class Usuarios extends javax.swing.JInternalFrame {
               int fila= tusuarios.getSelectedRow(); 
               String nombreUser =  tusuarios.getValueAt(fila, 1).toString();
               String rol =  tusuarios.getValueAt(fila, 2).toString();
+              String sucursal = tusuarios.getValueAt(fila, 3).toString();
               this.nombre.setText(nombreUser);  
               this.rol.setSelectedItem(rol);
+              this.sucursalSelect.setSelectedItem(sucursal);
         }
     }
     
@@ -563,7 +595,7 @@ public class Usuarios extends javax.swing.JInternalFrame {
               int fila= tusuarios.getSelectedRow();
               String cod="";
               cod=tusuarios.getValueAt(fila, 0).toString(); 
-              int n=this.p.bd.modificarUsuario(nombre.getText(),password.getText(),rol.getSelectedItem().toString(),cod,this);
+              int n=this.p.bd.modificarUsuario(nombre.getText(),password.getText(),rol.getSelectedItem().toString(),sucursalSelect.getSelectedItem().toString(), cod,this);
               if(n>0){
                  JOptionPane.showMessageDialog(null, "Usuario modificado con Exito.");
                  cargar("");
@@ -597,7 +629,7 @@ public class Usuarios extends javax.swing.JInternalFrame {
     
     private void nuevoUsuario() {
        if (validarDatos()){
-           int n=this.p.bd.agregarMiUsuario(nombre.getText(),password.getText(),rol.getSelectedItem().toString(),this);
+           int n=this.p.bd.agregarMiUsuario(nombre.getText(),password.getText(),rol.getSelectedItem().toString(), sucursalSelect.getSelectedItem().toString(), this);
            if(n>0){
                JOptionPane.showMessageDialog(null, "Usuario Guardado con Exito");
                principal();
@@ -674,6 +706,10 @@ public class Usuarios extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_repitePasswordKeyTyped
 
+    private void sucursalSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sucursalSelectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sucursalSelectActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actualizar;
@@ -698,6 +734,8 @@ public class Usuarios extends javax.swing.JInternalFrame {
     private javax.swing.JPasswordField repitePassword;
     private javax.swing.JLabel repitePasswordLabel;
     private javax.swing.JComboBox<String> rol;
+    private javax.swing.JLabel sucursalLabel;
+    private javax.swing.JComboBox<String> sucursalSelect;
     private javax.swing.JTable tusuarios;
     // End of variables declaration//GEN-END:variables
 

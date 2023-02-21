@@ -51,6 +51,7 @@ public class VerFactura extends javax.swing.JInternalFrame {
         descuento = new javax.swing.JLabel();
         motivo = new javax.swing.JLabel();
         forma = new javax.swing.JLabel();
+        sucursal = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tarticulos1 = new javax.swing.JTable();
@@ -80,6 +81,8 @@ public class VerFactura extends javax.swing.JInternalFrame {
 
         forma.setText("Forma de Pago");
 
+        sucursal.setText("Sucursal");
+
         javax.swing.GroupLayout jpanel1Layout = new javax.swing.GroupLayout(jpanel1);
         jpanel1.setLayout(jpanel1Layout);
         jpanel1Layout.setHorizontalGroup(
@@ -87,15 +90,18 @@ public class VerFactura extends javax.swing.JInternalFrame {
             .addGroup(jpanel1Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(jpanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(numero1)
-                    .addComponent(cliente1)
-                    .addComponent(comprobante)
-                    .addComponent(forma))
-                .addGap(92, 92, 92)
-                .addGroup(jpanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(motivo)
-                    .addComponent(descuento)
-                    .addComponent(fecha))
+                    .addComponent(sucursal)
+                    .addGroup(jpanel1Layout.createSequentialGroup()
+                        .addGroup(jpanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(numero1)
+                            .addComponent(cliente1)
+                            .addComponent(comprobante)
+                            .addComponent(forma))
+                        .addGap(92, 92, 92)
+                        .addGroup(jpanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(motivo)
+                            .addComponent(descuento)
+                            .addComponent(fecha))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpanel1Layout.setVerticalGroup(
@@ -115,7 +121,9 @@ public class VerFactura extends javax.swing.JInternalFrame {
                     .addComponent(motivo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(forma)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(sucursal)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalle de Artículos"));
@@ -177,14 +185,14 @@ public class VerFactura extends javax.swing.JInternalFrame {
                 .addGap(76, 76, 76))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1650, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cantidad)
@@ -232,6 +240,7 @@ public class VerFactura extends javax.swing.JInternalFrame {
               motivo.setText("Motivo: "+rst.getString(6));//motivo
               pago.setText("PAGO CLIENTE: "+Dominio.A2Decimales(rst.getString(7)));//pago cliente
               total.setText("TOTAL: "+Dominio.A2Decimales(rst.getString(8)));//total
+              sucursal.setText("Sucursal: "+ rst.getString(11));
               rst = this.p.bd.mostrarDatosFacturaProductoVenta(id_factura);
               model = (DefaultTableModel) tarticulos1.getModel();
               while (rst.next()){
@@ -272,6 +281,7 @@ public class VerFactura extends javax.swing.JInternalFrame {
     private javax.swing.JLabel motivo;
     private javax.swing.JLabel numero1;
     private javax.swing.JLabel pago;
+    private javax.swing.JLabel sucursal;
     private javax.swing.JTable tarticulos1;
     private javax.swing.JLabel total;
     // End of variables declaration//GEN-END:variables

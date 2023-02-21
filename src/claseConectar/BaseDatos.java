@@ -68,11 +68,12 @@ public class BaseDatos {
     }
      
      //MIS USUARIOS
-        public int agregarMiUsuario(String nombreUser, String password, String rol, Usuarios usuarios) {      
+    
+        public int agregarMiUsuario(String nombreUser, String password, String rol, String sucursal, Usuarios usuarios) {      
        int n=0;
          try { 
             consulta = cn.createStatement();
-            n=consulta.executeUpdate("insert into usuarios (nombre,password,rol) values('"+nombreUser+"', '"+password+"','"+rol+"')");
+            n=consulta.executeUpdate("insert into usuarios (nombre,password,rol, id_sucursal) values('"+nombreUser+"', '"+password+"','"+rol+"', (select id_sucursal from sucursales where nombre = '"+sucursal+"'));");
          } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
             if (ex.getErrorCode()==0){
@@ -91,11 +92,11 @@ public class BaseDatos {
     }
         
         
-    public int modificarUsuario(String nombreUser, String password, String rol, String cod, Usuarios usuarios) {
+    public int modificarUsuario(String nombreUser, String password, String rol, String sucursal, String cod, Usuarios usuarios) {
                int n=0;
          try { 
             consulta = cn.createStatement();
-            n=consulta.executeUpdate("UPDATE usuarios SET nombre='"+nombreUser+"',password='"+password+"',rol='"+rol+"' WHERE id_user='"+cod+"'");
+            n=consulta.executeUpdate("UPDATE usuarios SET nombre='"+nombreUser+"',password='"+password+"',rol='"+rol+"', id_sucursal=(select id_sucursal from sucursales where nombre = '"+sucursal+"') WHERE id_user='"+cod+"'");
          } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
             if (ex.getErrorCode()==0){
@@ -132,7 +133,7 @@ public class BaseDatos {
          ResultSet rs = null;
          try {
               consulta = cn.createStatement();
-              rs = consulta.executeQuery("SELECT id_user,nombre,rol FROM usuarios WHERE eliminado='0' and CONCAT(lower(nombre) , lower(rol)) LIKE '%"+valor.toLowerCase()+"%' order by id_user");
+              rs = consulta.executeQuery("SELECT u.id_user as id_user, u.nombre as nombre, u.rol as rol, s.nombre as sucursal FROM usuarios as u inner join sucursales as s on u.id_sucursal = s.id_sucursal WHERE u.eliminado='0' and CONCAT(lower(u.nombre) , lower(u.rol)) LIKE '%"+valor.toLowerCase()+"%' order by u.id_user");
         } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -143,9 +144,9 @@ public class BaseDatos {
          UsuarioLogueado usuarioLogueado = null;
          try {
               consulta = cn.createStatement();
-              ResultSet rs = consulta.executeQuery("SELECT nombre, rol from usuarios where eliminado='0' and lower(nombre) ='"+nombreUsuario.toLowerCase()+"' and password='"+password+"'");
+              ResultSet rs = consulta.executeQuery("SELECT u.nombre, u.rol, s.nombre from usuarios as u inner join sucursales as s on u.id_sucursal = s.id_sucursal where u.eliminado='0' and lower(u.nombre) ='"+nombreUsuario.toLowerCase()+"' and u.password='"+password+"'");
               if (rs.next()){
-                  usuarioLogueado = new UsuarioLogueado(rs.getString(1), rs.getString(2));         
+                  usuarioLogueado = new UsuarioLogueado(rs.getString(1), rs.getString(2), rs.getString(3));         
                }
         } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
@@ -411,13 +412,14 @@ public class BaseDatos {
          return rs;
      }
      
-     public int registrarFacturaVenta(String numero, Date fecha, String forma,String comprobante, String descuento, String motivo,String total,String estado, String entregado, String porcentaje_tarjeta, String id_mcliente){
+     public int registrarFacturaVenta(String numero, Date fecha, String forma,String comprobante, String descuento, String motivo,String total,String estado, String entregado, String porcentaje_tarjeta, String id_mcliente, String nombreSucursal){
       int n=0;
          try { 
              if (porcentaje_tarjeta.isEmpty())
                  porcentaje_tarjeta="0";
             consulta = cn.createStatement();
-            n= consulta.executeUpdate("insert into facturas (fecha,forma_pago,comprobante,descuento,motivo,total,estado,entregado,id_mcliente, porcentaje_tarjeta) values('"+fecha+"', '"+forma+"','"+comprobante+"','"+descuento+"','"+motivo+"','"+total+"','"+estado+"','"+entregado+"','"+id_mcliente+"','"+porcentaje_tarjeta+"')");
+            int id_sucursal = obtenerIdSucursalPorNombre(nombreSucursal);
+            n= consulta.executeUpdate("insert into facturas (id_factura, fecha,forma_pago,comprobante,descuento,motivo,total,estado,entregado,id_mcliente, porcentaje_tarjeta, id_sucursal) values('"+numero+"', '"+fecha+"', '"+forma+"','"+comprobante+"','"+descuento+"','"+motivo+"','"+total+"','"+estado+"','"+entregado+"','"+id_mcliente+"','"+porcentaje_tarjeta+"', '"+id_sucursal+"')");
             n= consulta.executeUpdate("INSERT into pagos (id_factura,fecha,entregado,estado) values('"+numero+"','"+fecha+"','"+entregado+"','pagoInicial')");
          } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
@@ -465,7 +467,7 @@ public class BaseDatos {
          ResultSet rs = null;
          try {
               consulta = cn.createStatement();
-              rs = consulta.executeQuery("SELECT f.fecha,c.nombre,f.forma_pago,f.comprobante,f.descuento,f.motivo,f.entregado, f.total,c.saldo_favor, f.porcentaje_tarjeta FROM facturas as f inner join misclientes as c on f.id_mcliente = c.id_mcliente WHERE id_factura='"+id_factura+"'");
+              rs = consulta.executeQuery("SELECT f.fecha,c.nombre,f.forma_pago,f.comprobante,f.descuento,f.motivo,f.entregado, f.total,c.saldo_favor, f.porcentaje_tarjeta, s.nombre FROM facturas as f inner join misclientes as c on f.id_mcliente = c.id_mcliente inner join sucursales as s on s.id_sucursal = f.id_sucursal WHERE id_factura='"+id_factura+"'");
   
         } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
@@ -569,13 +571,14 @@ public class BaseDatos {
              if (comprobante.equals("Factura")){
                     tipo="-"; //Si el comprobante era de factura suma al stock
              }        
-            rs = devolverStockArticulosFacturaVenta(id_factura);
-            String id_articulo, cantidad, id_talle;
+            rs = obtenerCantidadPorArticuloYTalle(id_factura);
+            String id_articulo, cantidad, id_talle, id_sucursal;
             while (rs.next()){
               id_articulo=rs.getString(1);
               id_talle = rs.getString(2);
               cantidad=tipo+rs.getString(3);
-              actualizarStockArticulosPorIdTalle(cantidad, id_articulo, id_talle); //Devuelve el Stock de artículos
+              id_sucursal = rs.getString(4);
+              actualizarStockArticulosPorIdTalleYIdSucursal(cantidad, id_articulo, id_talle, id_sucursal); //Devuelve el Stock de artículos
             }
             n= consulta.executeUpdate("DELETE FROM fa WHERE id_factura='"+id_factura+"'");
         } catch (SQLException ex) {
@@ -584,22 +587,6 @@ public class BaseDatos {
         return n; 
      }  
     
-
-     
-           
-      public ResultSet devolverStockArticulosFacturaVenta(String id_factura) {
-              ResultSet rs = null;
-         try {
-              consulta = cn.createStatement();
-             
-              rs = consulta.executeQuery("SELECT id_articulo, id_talle, cantidad from FA where id_factura='"+id_factura+"' "); //toma fila por fila
-  
-        } catch (SQLException ex) {
-            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         return rs;
-      }
-     
      
       public int obtenerCantidadVendidaDeFacturaPorArticuloYIdTalle(String id_articulo, String id_talle, String id_factura){
          ResultSet rs = null;
@@ -641,12 +628,24 @@ public class BaseDatos {
          ResultSet rs = null;
          try {
               consulta = cn.createStatement();
-              rs = consulta.executeQuery("SELECT id_articulo, id_talle, cantidad from FA where id_factura='"+id_factura+"'");
+              rs = consulta.executeQuery("SELECT far.id_articulo, far.id_talle, far.cantidad, f.id_sucursal from FA as far inner join facturas as f on f.id_factura = far.id_factura where far.id_factura='"+id_factura+"' ");
         } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
          return rs; 
     }
+    
+    public ResultSet obtenerTipoDeArticuloPorIdArticulo(int id_articulo) {
+         ResultSet rs = null;
+         try {
+              consulta = cn.createStatement();
+              rs = consulta.executeQuery("Select nombre from tipo_articulo where id_tipo = (select id_tipo from articulos where id_articulo = '"+id_articulo+"');");
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         return rs; 
+    }
+     
      
     public ResultSet listarArticulos(String con) {
          ResultSet rs = null;
@@ -668,9 +667,7 @@ public class BaseDatos {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
             
         }
-        return n;
-        
-        
+        return n;  
     }
 
     public int eliminarArticulo(String cod) {
@@ -743,12 +740,12 @@ public class BaseDatos {
        }
         
         
-         public String obtenerStockArticulo(String id_articulo, String id_talle){
+         public String obtenerStockArticulo(String id_articulo, String id_talle, String id_sucursal){
          ResultSet rs = null;
-         String stock=null;
+         String stock="0";
          try { 
             consulta = cn.createStatement();
-            rs = consulta.executeQuery("SELECT stock FROM talle_articulos WHERE id_articulo='"+id_articulo+"' and id_talle = '"+id_talle+"'");
+            rs = consulta.executeQuery("SELECT stock FROM talle_articulos WHERE id_articulo='"+id_articulo+"' and id_talle = '"+id_talle+"' and id_sucursal='"+id_sucursal+"';");
             if (rs.next()){
                   stock = rs.getString(1);                 
             }                 
@@ -758,23 +755,25 @@ public class BaseDatos {
         return stock;
        }
          
-      public String obtenerStockArticuloPorTalleYTipo(String id_articulo, String talle, String tipo){
+      public String obtenerStockArticuloPorTalleTipoYSucursal(String id_articulo, String talle, String tipo, String sucursal){
            int id_talle = obtenerIdTallePorTipoYTalle(talle, tipo);
-           return obtenerStockArticulo(id_articulo, String.valueOf(id_talle));      
+           int id_sucursal = obtenerIdSucursalPorNombre(sucursal);
+           return obtenerStockArticulo(id_articulo, String.valueOf(id_talle), String.valueOf(id_sucursal));      
        }  
                
-       public int actualizarStockArticulosPorTipoYTalle(String cant,String id_articulo, String tipo, String talle){
+       public int actualizarStockArticulosPorTipoTalleYSucursal(String cant,String id_articulo, String tipo, String talle, String sucursal){
          int id_talle = obtenerIdTallePorTipoYTalle(talle, tipo);
-         return actualizarStockArticulosPorIdTalle(cant, id_articulo, String.valueOf(id_talle));   
+          int id_sucursal = obtenerIdSucursalPorNombre(sucursal);
+         return actualizarStockArticulosPorIdTalleYIdSucursal(cant, id_articulo, String.valueOf(id_talle), String.valueOf(id_sucursal));   
        }
        
-       public int actualizarStockArticulosPorIdTalle(String cant,String id_articulo, String id_talle){
+       public int actualizarStockArticulosPorIdTalleYIdSucursal(String cant,String id_articulo, String id_talle, String id_sucursal){
          int n=0;
          ResultSet rs = null;
          int stock=0;
          try {            
             consulta = cn.createStatement();      
-                  stock = Integer.parseInt(obtenerStockArticulo(id_articulo, id_talle))-Integer.parseInt(cant);
+                  stock = Integer.parseInt(obtenerStockArticulo(id_articulo, id_talle, id_sucursal))-Integer.parseInt(cant);
                   if (stock<0){
                       stock=0;
                   }
@@ -826,8 +825,18 @@ public class BaseDatos {
         }
         return n;
     }
-
-        
+   
+    public int ActualizarCostosDeArticulos(String description, Float costo) {       
+        int n=0; 
+         try { 
+            consulta = cn.createStatement();        
+            n=consulta.executeUpdate("UPDATE articulos SET costo= '"+costo+"', ganancia=((precio_venta * 100 / "+costo+")-100) where eliminado='0' and lower(nombre) LIKE '%" + description.toLowerCase() + "%';");
+         } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return n;
+    }
+   
 
 //TALLES
     public ResultSet listarTallesPorTipo(String con) {
@@ -841,8 +850,8 @@ public class BaseDatos {
          return rs; 
     }
     
-    public ResultSet obtenerTallesPorArticulo(String idArticulo) {
-        String con = "SELECT t.nombre, ta.stock, ta.id_talle FROM talle_articulos as ta inner join talle as t on ta.id_talle = t.id_talle where ta.id_articulo="+idArticulo+" order by t.id_talle;";
+    public ResultSet obtenerTallesPorArticuloYSucursal(String idArticulo, String sucursal) {
+        String con = "SELECT t.nombre, ta.stock, ta.id_talle FROM talle_articulos as ta inner join talle as t on ta.id_talle = t.id_talle where ta.id_articulo="+idArticulo+" and ta.id_sucursal = (select id_sucursal from sucursales where nombre = '"+sucursal+"') order by t.id_talle;";
         ResultSet rs = null;
          try {
               consulta = cn.createStatement();
@@ -854,22 +863,23 @@ public class BaseDatos {
     }
 
     
-     public int eliminarTallesDeArticulos(Integer idArticulo){
+     public int eliminarTallesDeArticulos(Integer idArticulo, String sucursal){
          int n=0;
+         String querySucursal = sucursal != null ? "and id_sucursal = (select id_sucursal from sucursales where nombre ='"+sucursal+"')" : "";
         try {        
             consulta = cn.createStatement();
-            n= consulta.executeUpdate("DELETE FROM talle_articulos WHERE id_articulo='"+idArticulo+"'");
+            n= consulta.executeUpdate("DELETE FROM talle_articulos WHERE id_articulo='"+idArticulo+"' "+querySucursal+";");
         } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
         return n; 
      }  
      
-    public int agregarTalleDeArticulo(int idArticulo, String tipoArticulo, String talle, String stock) {
+    public int agregarTalleDeArticulo(int idArticulo, String tipoArticulo, String talle, String sucursal, String stock) {
         int n=0;
          try { 
             consulta = cn.createStatement();
-            n=consulta.executeUpdate("INSERT INTO talle_articulos(id_articulo, id_talle, stock) VALUES ("+idArticulo+", (SELECT id_talle FROM talle where nombre='"+talle+"' and id_tipo = (select id_tipo from tipo_articulo where nombre ='"+tipoArticulo+"')), "+stock+") ");
+            n=consulta.executeUpdate("INSERT INTO talle_articulos(id_articulo, id_talle, id_sucursal, stock) VALUES ("+idArticulo+", (SELECT id_talle FROM talle where nombre='"+talle+"' and id_tipo = (select id_tipo from tipo_articulo where nombre ='"+tipoArticulo+"')), (select id_sucursal from sucursales where nombre = '"+sucursal+"'), "+stock+") ");
          } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -953,15 +963,116 @@ public class BaseDatos {
         }
          return rs; 
     }
-
-
-
-
-
-
-
-
-
-
+     
+     // SUCURSALES
+     public ResultSet listarDatosSucursales() {    
+         ResultSet rs = null;
+         try {
+              consulta = cn.createStatement();
+              rs = consulta.executeQuery("SELECT id_sucursal,nombre FROM sucursales where eliminado = '0' order by id_sucursal");
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         return rs; 
+    }
+     
+     public ResultSet listarDatosSucursalesTotales() {    
+         ResultSet rs = null;
+         try {
+              consulta = cn.createStatement();
+              rs = consulta.executeQuery("SELECT id_sucursal,nombre FROM sucursales order by id_sucursal");
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         return rs; 
+    }
+     
+     public boolean existeLaSucursal(String sucursal) {         
+         ResultSet rs = null;
+         try {
+              consulta = cn.createStatement();
+              rs = consulta.executeQuery("SELECT * from sucursales where nombre ='"+sucursal+"' and eliminado ='0' ");
+              return rs.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         return false; 
+    }
+     
+      public int CantidadDeSucursales() {       
+     
+         try { 
+            consulta = cn.createStatement();        
+            ResultSet rs=consulta.executeQuery("Select count(*) from sucursales;");
+             if (rs.next()){
+                  return Integer.parseInt(rs.getString(1));                 
+            }  
+         } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+      
+     public int agregarSucursal(String nombre) {      
+       int n=0;
+         try { 
+            consulta = cn.createStatement();
+            n=consulta.executeUpdate("INSERT INTO public.sucursales( nombre) VALUES ('"+nombre+"');");
+         } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return n;
+    }
+     
+     public int eliminarSucursal(String idSucursal) {      
+       int n=0;
+         try { 
+            consulta = cn.createStatement();
+            consulta.executeUpdate("DELETE from talle_articulos WHERE id_sucursal='"+idSucursal+"'");
+            n=consulta.executeUpdate("update sucursales set eliminado = '1' WHERE id_sucursal='"+idSucursal+"'");
+         } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return n;
+    }
+     
+       public int obtenerIdSucursalPorNombre(String nombre) {
+        int n=0;
+         try { 
+            consulta = cn.createStatement();
+            ResultSet rs = consulta.executeQuery("select id_sucursal from sucursales where nombre='"+nombre+"';");
+            if (rs.next()){
+                 n= Integer.parseInt(rs.getString(1));
+            }  
+         } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return n;
+    }
+       
+       
+   //ESTADISTICAS DE ARTICULOS
+        public ResultSet mostrarEstadisticasDeArticulos(String con) {
+         ResultSet rs = null;   
+         try {
+              consulta = cn.createStatement();
+              rs = consulta.executeQuery(con);
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         return rs; 
+    }
+        
+     public ResultSet obtenerFechaMinimaYMaximaDeFacturas(){    
+         ResultSet rs = null;
+         try {
+              consulta = cn.createStatement();
+              rs = consulta.executeQuery("SELECT min(fecha), max(fecha) from facturas where eliminado='0';");
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         return rs;   
+    }
+        
        
 }

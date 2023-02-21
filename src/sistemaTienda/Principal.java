@@ -95,7 +95,8 @@ public class Principal extends javax.swing.JFrame {
         caja = new javax.swing.JMenuItem();
         deudores = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
-        estadisticas = new javax.swing.JMenuItem();
+        estadisticasClientes = new javax.swing.JMenuItem();
+        estadisticasArticulos = new javax.swing.JMenuItem();
         configuracion = new javax.swing.JMenu();
         cambiarImagen = new javax.swing.JMenuItem();
         tema = new javax.swing.JMenu();
@@ -104,6 +105,7 @@ public class Principal extends javax.swing.JFrame {
         metal = new javax.swing.JMenuItem();
         admin = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Sistema de Tienda");
@@ -203,11 +205,11 @@ public class Principal extends javax.swing.JFrame {
         iniciarSesionLabel.getAccessibleContext().setAccessibleName("Iniciar Sesión");
 
         escritorio.add(panelInicio);
-        panelInicio.setBounds(370, 220, 545, 252);
+        panelInicio.setBounds(510, 350, 545, 252);
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/fondo.jpg"))); // NOI18N
         escritorio.add(fondo);
-        fondo.setBounds(0, 0, 1260, 710);
+        fondo.setBounds(0, 0, 1920, 1080);
 
         jMenuBar1.setName("Sistema Contable"); // NOI18N
 
@@ -374,18 +376,31 @@ public class Principal extends javax.swing.JFrame {
         });
         informes.add(jMenuItem1);
 
-        estadisticas.setText("Estadísticas Clientes");
-        estadisticas.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        estadisticasClientes.setText("Estadísticas Clientes");
+        estadisticasClientes.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
-                estadisticasMouseMoved(evt);
+                estadisticasClientesMouseMoved(evt);
             }
         });
-        estadisticas.addActionListener(new java.awt.event.ActionListener() {
+        estadisticasClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                estadisticasActionPerformed(evt);
+                estadisticasClientesActionPerformed(evt);
             }
         });
-        informes.add(estadisticas);
+        informes.add(estadisticasClientes);
+
+        estadisticasArticulos.setLabel("Estadísticas de Artículos");
+        estadisticasArticulos.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                estadisticasArticulosMouseMoved(evt);
+            }
+        });
+        estadisticasArticulos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                estadisticasArticulosActionPerformed(evt);
+            }
+        });
+        informes.add(estadisticasArticulos);
 
         jMenuBar1.add(informes);
 
@@ -477,6 +492,15 @@ public class Principal extends javax.swing.JFrame {
         });
         admin.add(jMenuItem2);
 
+        jCheckBoxMenuItem1.setText("Sucursales");
+        jCheckBoxMenuItem1.setRequestFocusEnabled(false);
+        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem1ActionPerformed(evt);
+            }
+        });
+        admin.add(jCheckBoxMenuItem1);
+
         jMenuBar1.add(admin);
 
         setJMenuBar(jMenuBar1);
@@ -485,15 +509,11 @@ public class Principal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(escritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 1261, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(escritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 1074, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(escritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(escritorio, javax.swing.GroupLayout.DEFAULT_SIZE, 869, Short.MAX_VALUE)
         );
 
         pack();
@@ -608,7 +628,7 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cajaActionPerformed
 
-    private void estadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_estadisticasActionPerformed
+    private void estadisticasClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_estadisticasClientesActionPerformed
      try {
          EstadisticasClientes est = new EstadisticasClientes(this);
          this.escritorio.add(est);
@@ -618,7 +638,7 @@ public class Principal extends javax.swing.JFrame {
         } catch (PropertyVetoException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_estadisticasActionPerformed
+    }//GEN-LAST:event_estadisticasClientesActionPerformed
 
     private void archivoMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_archivoMouseMoved
      archivo.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -662,9 +682,9 @@ public class Principal extends javax.swing.JFrame {
         deudores.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_deudoresMouseMoved
 
-    private void estadisticasMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_estadisticasMouseMoved
-        estadisticas.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }//GEN-LAST:event_estadisticasMouseMoved
+    private void estadisticasClientesMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_estadisticasClientesMouseMoved
+        estadisticasClientes.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_estadisticasClientesMouseMoved
 
     private void configuracionMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_configuracionMouseMoved
         configuracion.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -818,6 +838,34 @@ public class Principal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_formComponentResized
 
+    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+      try {
+            Sucursales cli= new Sucursales(this);
+            escritorio.add(cli);
+            escritorio.setSelectedFrame(cli);
+            cli.show();
+            cli.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+
+    private void estadisticasArticulosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_estadisticasArticulosMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_estadisticasArticulosMouseMoved
+
+    private void estadisticasArticulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_estadisticasArticulosActionPerformed
+        try {
+            EstadisticasArticulos ea = new EstadisticasArticulos(this);
+            this.escritorio.add(ea);
+            this.escritorio.setSelectedFrame(ea);
+            ea.show();        
+            ea.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_estadisticasArticulosActionPerformed
+
    private Boolean validarInicio(){
        boolean validar = true;
        String nombreUsuario= this.nombreUsuario.getText();
@@ -862,11 +910,13 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem consultar;
     private javax.swing.JMenuItem deudores;
     public javax.swing.JDesktopPane escritorio;
-    private javax.swing.JMenuItem estadisticas;
+    private javax.swing.JMenuItem estadisticasArticulos;
+    private javax.swing.JMenuItem estadisticasClientes;
     private javax.swing.JLabel fondo;
     private javax.swing.JMenu informes;
     private javax.swing.JLabel iniciarSesionLabel;
     private javax.swing.JButton jButton1;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -895,7 +945,7 @@ public class Principal extends javax.swing.JFrame {
     private void configuracionEstandarComponentes() {
         archivo.setVisible(false);
         articulos.setVisible(false);
-        estadisticas.setVisible(false);
+        estadisticasClientes.setVisible(false);
         ventas.setVisible(false);
         informes.setVisible(false);
         configuracion.setVisible(false);
@@ -914,7 +964,10 @@ public class Principal extends javax.swing.JFrame {
           if (usuarioLogueado.getPermisos().contains("PUEDE VER ADMIN"))
               admin.setVisible(true);
           if (usuarioLogueado.getPermisos().contains("PUEDE VER ESTADISTICAS DE CLIENTES"))
-              estadisticas.setVisible(true);
+              estadisticasClientes.setVisible(true);
+          if (usuarioLogueado.getPermisos().contains("PUEDE VER ESTADISTICAS DE ARTICULOS"))
+              estadisticasArticulos.setVisible(true);
+              
       }
     }
 

@@ -48,16 +48,29 @@ public class Caja extends javax.swing.JInternalFrame {
         Dominio.centrarDatos(tfacturas);
         this.setLocation((this.p.getSize().width/2)-(this.getWidth()/2), (this.p.getSize().height/2)-(this.getHeight()/2));  
         configuracionEstandarComponentes();
+        initSucursales();
     }
     
      private void configuracionEstandarComponentes() {
          UsuarioLogueado usuarioLogueado = this.p.usuarioLogueado;             
           if (!usuarioLogueado.getPermisos().contains("PUEDE VER DATOS SENSIBLES EN CAJA")){
-              tfacturas.removeColumn(tfacturas.getColumnModel().getColumn(8));
-              tfacturas.removeColumn(tfacturas.getColumnModel().getColumn(8));
+              tfacturas.removeColumn(tfacturas.getColumnModel().getColumn(10));
+              tfacturas.removeColumn(tfacturas.getColumnModel().getColumn(9));
               cos.setVisible(false);
               gan.setVisible(false);
           }
+    }
+     
+     private void initSucursales() {
+            try {
+            ResultSet rs = this.p.bd.listarDatosSucursalesTotales();
+            while(rs.next())
+            {       
+                sucursal.addItem(rs.getString("nombre"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
+        }                  
     }
 
     /**
@@ -98,6 +111,8 @@ public class Caja extends javax.swing.JInternalFrame {
         comprobante = new javax.swing.JComboBox<>();
         estadoRadio = new javax.swing.JRadioButton();
         estado = new javax.swing.JComboBox<>();
+        sucursalRadio = new javax.swing.JRadioButton();
+        sucursal = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setClosable(true);
@@ -113,11 +128,11 @@ public class Caja extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Fecha", "Numero", "Cliente", "Forma de Pago", "Comprobante", "Descuento (Promedio %)", "Motivo", "Estado", "Costos", "Ganancias", "Entregado", "Total"
+                "Fecha", "Numero", "Sucursal", "Cliente", "Forma de Pago", "Comprobante", "Descuento (Promedio %)", "Motivo", "Estado", "Costos", "Ganancias", "Entregado", "Total"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -142,6 +157,16 @@ public class Caja extends javax.swing.JInternalFrame {
             }
         });
         jScrollPane1.setViewportView(tfacturas);
+        if (tfacturas.getColumnModel().getColumnCount() > 0) {
+            tfacturas.getColumnModel().getColumn(9).setPreferredWidth(150);
+            tfacturas.getColumnModel().getColumn(9).setMaxWidth(150);
+            tfacturas.getColumnModel().getColumn(10).setPreferredWidth(150);
+            tfacturas.getColumnModel().getColumn(10).setMaxWidth(150);
+            tfacturas.getColumnModel().getColumn(11).setPreferredWidth(150);
+            tfacturas.getColumnModel().getColumn(11).setMaxWidth(150);
+            tfacturas.getColumnModel().getColumn(12).setPreferredWidth(150);
+            tfacturas.getColumnModel().getColumn(12).setMaxWidth(150);
+        }
 
         gan.setEditable(false);
         gan.setEnabled(false);
@@ -162,6 +187,11 @@ public class Caja extends javax.swing.JInternalFrame {
 
         cos.setEditable(false);
         cos.setEnabled(false);
+        cos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cosActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Saldo a favor de Clientes:");
 
@@ -176,48 +206,48 @@ public class Caja extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel5)
-                        .addGap(265, 265, 265)
-                        .addComponent(afavor, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(105, 105, 105))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(cantidad)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
-                        .addComponent(cos, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(gan, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(ent, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(cantidad)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel5)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tot, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(cos, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(gan, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ent, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(afavor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tot, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
-
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cos, ent, gan, tot});
-
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(afavor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
+                    .addComponent(afavor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cantidad)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(tot, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(ent, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ent, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(gan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(tot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
@@ -335,6 +365,19 @@ public class Caja extends javax.swing.JInternalFrame {
             }
         });
 
+        sucursalRadio.setText("Sucursal");
+        sucursalRadio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sucursalRadioActionPerformed(evt);
+            }
+        });
+
+        sucursal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sucursalActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -373,10 +416,16 @@ public class Caja extends javax.swing.JInternalFrame {
                             .addComponent(forma, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(comprobante, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(41, 41, 41)
-                .addComponent(estadoRadio)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(estado, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(estadoRadio)
+                        .addGap(18, 18, 18)
+                        .addComponent(estado, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(sucursalRadio)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(sucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(261, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -407,7 +456,9 @@ public class Caja extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(formaRadio)
-                    .addComponent(forma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(forma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sucursalRadio)
+                    .addComponent(sucursal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comprobanteRadio)
@@ -459,7 +510,7 @@ public class Caja extends javax.swing.JInternalFrame {
             return lab;
         }
     });    
-    String []Registros=new String[12];
+    String []Registros=new String[13];
     model= (DefaultTableModel) tfacturas.getModel();
     model = Dominio.eliminarTabla(model); 
     int ventas=0;
@@ -478,9 +529,12 @@ public class Caja extends javax.swing.JInternalFrame {
                   }
                   if (estadoRadio.isSelected()){
                       filtros+=" and fac.estado ='"+estado.getSelectedItem().toString()+"' ";
-                  }              
-                  consulta+="SELECT pa.fecha, fac.id_factura, c.nombre, fac.forma_pago,fac.comprobante,fac.descuento,fac.motivo, fac.estado,"
-                          + "pa.entregado,fac.total,pa.estado FROM ((misclientes as c inner join facturas as fac on c.id_mcliente=fac.id_mcliente) inner join pagos as pa on pa.id_factura=fac.id_factura) "
+                  }
+                  if (sucursalRadio.isSelected()){
+                      filtros+=" and s.nombre ='"+sucursal.getSelectedItem().toString()+"' ";
+                  }
+                  consulta+="SELECT pa.fecha, fac.id_factura, s.nombre, c.nombre, fac.forma_pago,fac.comprobante,fac.descuento,fac.motivo, fac.estado,"
+                          + "pa.entregado,fac.total, pa.estado FROM (((misclientes as c inner join facturas as fac on c.id_mcliente=fac.id_mcliente) inner join pagos as pa on pa.id_factura=fac.id_factura) inner join sucursales as s on s.id_sucursal = fac.id_sucursal) "
                           + " WHERE fac.eliminado='0' and pa.fecha>='"+de+"' and pa.fecha<='"+ha+"' "+filtros+ " order by pa.fecha, fac.id_factura asc";
               rsfactura = this.p.bd.mostrarFacturasVentas(consulta); //toma fila por fila 
               float entregado=0;
@@ -492,37 +546,38 @@ public class Caja extends javax.swing.JInternalFrame {
               String estadoPago;
               while(rsfactura.next())
               {                
-                  descuentoFactura = Float.parseFloat(Dominio.A2Decimales(rsfactura.getString(6))); //descuento
-                  totalFactura= Float.parseFloat(Dominio.A2Decimales(rsfactura.getString(10)));
+                  descuentoFactura = Float.parseFloat(Dominio.A2Decimales(rsfactura.getString(7))); //descuento
+                  totalFactura= Float.parseFloat(Dominio.A2Decimales(rsfactura.getString(11)));
                   Registros[0]= Dominio.formatofechaJCalender.format(Dominio.formatofechaBD.parse(rsfactura.getString(1))); //fecha 
                   String id_factura = rsfactura.getString(2); //nro_factura  
                   Registros[1]= id_factura; //numero 
-                  Registros[2]= rsfactura.getString(3); //cliente
-                  Registros[3]= rsfactura.getString(4); //forma de pago
-                  Registros[4]= rsfactura.getString(5); //comprobante
-                  Registros[5]= Dominio.A2Decimales(this.p.bd.obtenerPromedioDeDescuentos(id_factura));
-                  Registros[6]= rsfactura.getString(7); //motivo
-                  Registros[7]= rsfactura.getString(8); //estado
-                  estadoPago= rsfactura.getString(11); //estadoPago
+                  Registros[2]= rsfactura.getString(3); //factura
+                  Registros[3]= rsfactura.getString(4); //cliente
+                  Registros[4]= rsfactura.getString(5); //forma de pago
+                  Registros[5]= rsfactura.getString(6); //comprobante
+                  Registros[6]= Dominio.A2Decimales(this.p.bd.obtenerPromedioDeDescuentos(id_factura));
+                  Registros[7]= rsfactura.getString(8); //motivo
+                  Registros[8]= rsfactura.getString(9); //estado
+                  estadoPago= rsfactura.getString(12); //estadoPago
                   if (estadoPago.equals("pagoInicial")){
                     ResultSet rsCostos = this.p.bd.obtenerCostosDeFactura(id_factura);                
                      if (rsCostos.next()){
-                       Registros[8]= Dominio.A2Decimales(rsCostos.getString(1));;   //costos                    
+                       Registros[9]= Dominio.A2Decimales(rsCostos.getString(1));;   //costos                    
                     }
-                     Registros[9]= Dominio.A2Decimales(Float.toString(totalFactura-Float.parseFloat(Registros[8]))); //ganancia  = total-costos 
-                     Registros[11]= Dominio.A2Decimales(rsfactura.getString(10)); //total
-                     costos+= Float.parseFloat(Registros[8]);
-                     ganancias+= Float.parseFloat(Registros[9]);
-                     total+= Float.parseFloat(Registros[11]);
+                     Registros[10]= Dominio.A2Decimales(Float.toString(totalFactura-Float.parseFloat(Registros[9]))); //ganancia  = total-costos 
+                     Registros[12]= Dominio.A2Decimales(rsfactura.getString(11)); //total
+                     costos+= Float.parseFloat(Registros[9]);
+                     ganancias+= Float.parseFloat(Registros[10]);
+                     total+= Float.parseFloat(Registros[12]);
                      ventas++;
                   }else{
-                      Registros[8]="-";
                       Registros[9]="-";
-                      Registros[11]="-";       
+                      Registros[10]="-";
+                      Registros[12]="-";       
                   }
-                  Registros[10]= Dominio.A2Decimales(rsfactura.getString(9)); //entregado
+                  Registros[11]= Dominio.A2Decimales(rsfactura.getString(10)); //entregado
                   
-                  entregado+= Float.parseFloat(Registros[10]);
+                  entregado+= Float.parseFloat(Registros[11]);
                   model.addRow(Registros);      
               }
               tfacturas.setModel(model);
@@ -610,20 +665,21 @@ public class Caja extends javax.swing.JInternalFrame {
             XSSFRow filaTitulo = hoja.createRow(2); //Creo una fila
             filaTitulo.createCell(0).setCellValue("Fecha");
             filaTitulo.createCell(1).setCellValue("Número");
-            filaTitulo.createCell(2).setCellValue("Cliente");
-            filaTitulo.createCell(3).setCellValue("Forma de Pago");
-            filaTitulo.createCell(4).setCellValue("Comprobante");
-            filaTitulo.createCell(5).setCellValue("Descuento (Promedio %)");
-            filaTitulo.createCell(6).setCellValue("Motivo");
-            filaTitulo.createCell(7).setCellValue("Estado");
+            filaTitulo.createCell(2).setCellValue("Sucursal");
+            filaTitulo.createCell(3).setCellValue("Cliente");
+            filaTitulo.createCell(4).setCellValue("Forma de Pago");
+            filaTitulo.createCell(5).setCellValue("Comprobante");
+            filaTitulo.createCell(6).setCellValue("Descuento (Promedio %)");
+            filaTitulo.createCell(7).setCellValue("Motivo");
+            filaTitulo.createCell(8).setCellValue("Estado");
             if (this.p.usuarioLogueado.getPermisos().contains("PUEDE VER DATOS SENSIBLES EN CAJA")){
-                filaTitulo.createCell(8).setCellValue("Costos");
-                filaTitulo.createCell(9).setCellValue("Ganancias");
-                filaTitulo.createCell(10).setCellValue("Entregado");
-                filaTitulo.createCell(11).setCellValue("Total");
+                filaTitulo.createCell(9).setCellValue("Costos");
+                filaTitulo.createCell(10).setCellValue("Ganancias");
+                filaTitulo.createCell(11).setCellValue("Entregado");
+                filaTitulo.createCell(12).setCellValue("Total");
             }else{
-               filaTitulo.createCell(8).setCellValue("Entregado");
-               filaTitulo.createCell(9).setCellValue("Total"); 
+               filaTitulo.createCell(9).setCellValue("Entregado");
+               filaTitulo.createCell(10).setCellValue("Total"); 
             }
 
             XSSFRow filasDatos;
@@ -635,18 +691,18 @@ public class Caja extends javax.swing.JInternalFrame {
                 }               
             }           
             XSSFRow filaFinal = hoja.createRow(i+4); //Creo una fila
-            filaFinal.createCell(7).setCellValue("Saldo Clientes");
-            filaFinal.createCell(10).setCellValue(afavor.getText());
+            filaFinal.createCell(8).setCellValue("Saldo Clientes");
+            filaFinal.createCell(11).setCellValue(afavor.getText());
             filaFinal = hoja.createRow(i+6); //Creo una fila
-            filaFinal.createCell(7).setCellValue("TOTAL");
+            filaFinal.createCell(8).setCellValue("TOTAL");
             if (this.p.usuarioLogueado.getPermisos().contains("PUEDE VER DATOS SENSIBLES EN CAJA")){
-                filaFinal.createCell(8).setCellValue(cos.getText());
-                filaFinal.createCell(9).setCellValue(gan.getText());
-                filaFinal.createCell(10).setCellValue(ent.getText());
-                filaFinal.createCell(11).setCellValue(tot.getText());
+                filaFinal.createCell(9).setCellValue(cos.getText());
+                filaFinal.createCell(10).setCellValue(gan.getText());
+                filaFinal.createCell(11).setCellValue(ent.getText());
+                filaFinal.createCell(12).setCellValue(tot.getText());
             }else{
-                filaFinal.createCell(8).setCellValue(ent.getText());
-                filaFinal.createCell(9).setCellValue(tot.getText());
+                filaFinal.createCell(9).setCellValue(ent.getText());
+                filaFinal.createCell(10).setCellValue(tot.getText());
             }    
             try {
                 excel.write(new FileOutputStream(file));
@@ -744,6 +800,20 @@ public class Caja extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ganActionPerformed
 
+    private void sucursalRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sucursalRadioActionPerformed
+         cargar(desde.getDate(),hasta.getDate()); 
+    }//GEN-LAST:event_sucursalRadioActionPerformed
+
+    private void sucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sucursalActionPerformed
+        if (sucursalRadio.isSelected()){
+           cargar(desde.getDate(),hasta.getDate()); 
+        } 
+    }//GEN-LAST:event_sucursalActionPerformed
+
+    private void cosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField afavor;
@@ -773,6 +843,8 @@ public class Caja extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton mostrar;
+    private javax.swing.JComboBox<String> sucursal;
+    private javax.swing.JRadioButton sucursalRadio;
     private javax.swing.JTable tfacturas;
     private javax.swing.JTextField tot;
     // End of variables declaration//GEN-END:variables

@@ -92,11 +92,11 @@ public class BuscarFacturaVenta extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Fecha", "Número", "Cliente ", "Forma de Pago", "Comprobante", "Descuento", "Motivo", "Total", "Estado", "Entregado"
+                "Fecha", "Número", "Sucursal", "Cliente ", "Forma de Pago", "Comprobante", "Descuento", "Motivo", "Total", "Estado", "Entregado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -133,7 +133,7 @@ public class BuscarFacturaVenta extends javax.swing.JInternalFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cantidad)
                 .addContainerGap())
@@ -239,7 +239,7 @@ public class BuscarFacturaVenta extends javax.swing.JInternalFrame {
                         .addComponent(hasta, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(22, 22, 22)
                 .addComponent(mostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(218, Short.MAX_VALUE))
+                .addContainerGap(1286, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,9 +248,7 @@ public class BuscarFacturaVenta extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(mostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(nombreRadio)
-                        .addGap(45, 45, 45))
+                        .addGap(86, 86, 86))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -262,12 +260,14 @@ public class BuscarFacturaVenta extends javax.swing.JInternalFrame {
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(facturaRadio))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(22, 22, 22)
-                                .addComponent(buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(58, 58, 58))))
+                                .addComponent(buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(facturaRadio)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nombreRadio)))
+                        .addGap(35, 35, 35))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -285,8 +285,8 @@ public class BuscarFacturaVenta extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(20, 20, 20))
         );
@@ -337,34 +337,40 @@ public class BuscarFacturaVenta extends javax.swing.JInternalFrame {
     });
           
     String consulta="";
-    String []Registros=new String[10];
+    String []Registros=new String[11];
     model= (DefaultTableModel) tfacturas.getModel();
     model = Dominio.eliminarTabla(model); 
         try {
               ResultSet rsfactura = null;
+              String querySucursal = "";
+              if (!this.p.usuarioLogueado.getRol().equals(Constantes.ROL_ADMIN)){
+                   querySucursal = " and s.nombre = '"+this.p.usuarioLogueado.getSucursal()+"' ";
+              }
+              
               if (de==null && ha ==null){ //Busca todo o por nombre 
                   if(facturaRadio.isSelected()){
-                       consulta="SELECT f.fecha, f.id_factura,c.nombre,f.forma_pago,f.comprobante,f.motivo,f.total,f.estado,f.entregado FROM facturas as f inner join misclientes as c on f.id_mcliente = c.id_mcliente WHERE concat(f.id_factura) LIKE '%"+valor+"%' and f.eliminado = '0'  order by f.fecha,f.id_factura";
+                       consulta="SELECT f.fecha, f.id_factura,s.nombre, c.nombre,f.forma_pago,f.comprobante,f.motivo,f.total,f.estado,f.entregado FROM facturas as f inner join misclientes as c on f.id_mcliente = c.id_mcliente inner join sucursales as s on s.id_sucursal = f.id_sucursal WHERE concat(f.id_factura) LIKE '%"+valor+"%' and f.eliminado = '0' "+querySucursal+" order by f.fecha,f.id_factura";
                     }
                   if(nombreRadio.isSelected()){
-                      consulta="SELECT f.fecha, f.id_factura,c.nombre,f.forma_pago,f.comprobante,f.motivo,f.total,f.estado,f.entregado FROM facturas as f inner join misclientes as c on f.id_mcliente = c.id_mcliente WHERE lower(c.nombre) LIKE '%"+valor.toLowerCase()+"%' and f.eliminado = '0'  order by f.fecha,f.id_factura";
+                      consulta="SELECT f.fecha, f.id_factura,s.nombre, c.nombre,f.forma_pago,f.comprobante,f.motivo,f.total,f.estado,f.entregado FROM facturas as f inner join misclientes as c on f.id_mcliente = c.id_mcliente inner join sucursales as s on s.id_sucursal = f.id_sucursal WHERE lower(c.nombre) LIKE '%"+valor.toLowerCase()+"%' and f.eliminado = '0' "+querySucursal+"  order by f.fecha,f.id_factura";
                     }
               }else{
-                 consulta="SELECT f.fecha, f.id_factura,c.nombre,f.forma_pago,f.comprobante,f.motivo,f.total,f.estado,f.entregado FROM facturas as f inner join misclientes as c on f.id_mcliente = c.id_mcliente WHERE  f.fecha>='"+de+"' and f.fecha <='"+ha+"' and f.eliminado = '0'  order by f.fecha,f.id_factura";
+                 consulta="SELECT f.fecha, f.id_factura,s.nombre, c.nombre,f.forma_pago,f.comprobante,f.motivo,f.total,f.estado,f.entregado FROM facturas as f inner join misclientes as c on f.id_mcliente = c.id_mcliente inner join sucursales as s on s.id_sucursal = f.id_sucursal WHERE  f.fecha>='"+de+"' and f.fecha <='"+ha+"' and f.eliminado = '0' "+querySucursal+" order by f.fecha,f.id_factura";
               }
               rsfactura = this.p.bd.mostrarFacturasVentas(consulta); //toma fila por fila 
               while(rsfactura.next())
               {
                   Registros[0]= Dominio.formatofechaJCalender.format(Dominio.formatofechaBD.parse(rsfactura.getString(1)));
                   Registros[1]= rsfactura.getString(2);  //id_factura
-                  Registros[2]=rsfactura.getString(3);  //nombre 
-                  Registros[3]=rsfactura.getString(4);  //forma 
-                  Registros[4]=rsfactura.getString(5);  //comprobante
-                  Registros[5]= Dominio.A2Decimales(this.p.bd.obtenerPromedioDeDescuentos(rsfactura.getString(2)));//oBTIENE Descuentos totales             
-                  Registros[6]=rsfactura.getString(6); //motivo
-                  Registros[7]= Dominio.A2Decimales(rsfactura.getString(7)); //total 
-                  Registros[8]=rsfactura.getString(8); //estado
-                  Registros[9]=Dominio.A2Decimales(rsfactura.getString(9)); //entregado
+                  Registros[2]=rsfactura.getString(3);  //nombre sucursal
+                  Registros[3]=rsfactura.getString(4);  //nombre cliente
+                  Registros[4]=rsfactura.getString(5);  //forma 
+                  Registros[5]=rsfactura.getString(6);  //comprobante
+                  Registros[6]= Dominio.A2Decimales(this.p.bd.obtenerPromedioDeDescuentos(rsfactura.getString(2)));//oBTIENE Descuentos totales             
+                  Registros[7]=rsfactura.getString(7); //motivo
+                  Registros[8]= Dominio.A2Decimales(rsfactura.getString(8)); //total 
+                  Registros[9]=rsfactura.getString(9); //estado
+                  Registros[10]=Dominio.A2Decimales(rsfactura.getString(10)); //entregado
                   model.addRow(Registros);      
               }
               tfacturas.setModel(model);  
@@ -451,18 +457,19 @@ public class BuscarFacturaVenta extends javax.swing.JInternalFrame {
                      JOptionPane.showMessageDialog(this,"La factura ha sido eliminada","Eliminar Factura", JOptionPane.INFORMATION_MESSAGE); //Tipo de mensaje
                      cargar("",desde.getDate(),hasta.getDate());
                      ResultSet rsfactura = this.p.bd.obtenerCantidadPorArticuloYTalle(id_factura);
-                     String id_articulo,cant, id_talle;
+                     String id_articulo,cant, id_talle, id_sucursal;
                       try {
                           while(rsfactura.next())
                           {  
                             id_articulo = rsfactura.getString(1);
                             id_talle = rsfactura.getString(2);
                             cant = rsfactura.getString(3);
+                            id_sucursal = rsfactura.getString(4);
                             if (comprobante.equals("Factura")){
-                               this.p.bd.actualizarStockArticulosPorIdTalle("-"+cant,id_articulo, id_talle);
+                               this.p.bd.actualizarStockArticulosPorIdTalleYIdSucursal("-"+cant,id_articulo, id_talle, id_sucursal);
                             }else{
                                 System.out.println(cant);
-                               this.p.bd.actualizarStockArticulosPorIdTalle(cant,id_articulo, id_talle); 
+                               this.p.bd.actualizarStockArticulosPorIdTalleYIdSucursal(cant,id_articulo, id_talle, id_sucursal); 
                             }
                           }
                       } catch (SQLException ex) {
