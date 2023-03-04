@@ -946,6 +946,7 @@ public class Principal extends javax.swing.JFrame {
         archivo.setVisible(false);
         articulos.setVisible(false);
         estadisticasClientes.setVisible(false);
+        estadisticasArticulos.setVisible(false);
         ventas.setVisible(false);
         informes.setVisible(false);
         configuracion.setVisible(false);
